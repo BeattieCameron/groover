@@ -37,7 +37,11 @@ const G = {
 
 	BASE_CAMERA_SPEED: -.07,
 
-	DEATH_RADIUS_RATE: 0.01
+	DEATH_RADIUS_RATE: 0.01,
+
+	SHAKE_MAGNITUDE: 1.1,
+	SHAKE_DURATION: 10
+	
 };
 
 var isJabbing = false;
@@ -51,6 +55,10 @@ var beatSpawnAngle = 0;
 var beatSpawnColor = 0;
 var combo = 10;
 var comboDeadAngle = 0;
+var screenShakeOffsetX = 0;
+var screenShakeOffsetY = 0;
+var screenShakeMagnitude = G.SHAKE_MAGNITUDE;
+var screenShakeCounter = 10;
 
 /**
 * @typedef {{
@@ -180,30 +188,30 @@ function playerHandler()
 	color("purple");
 
 
-	box(player.pos, 10);
-	arc(player.pos, G.BEAT_RADIUS, G.BEAT_THICKNESS, player.rotation, player.rotation + (2 * Math.PI));
+	box(player.pos.x + screenShakeOffsetX, player.pos.y + screenShakeOffsetY, 10);
+	arc(player.pos.x + screenShakeOffsetX, player.pos.y + screenShakeOffsetY, G.BEAT_RADIUS, G.BEAT_THICKNESS, player.rotation, player.rotation + (2 * Math.PI));
 	//arc(player.pos, G.BEAT_RADIUS, G.BEAT_THICKNESS,-3,0);
 
-	player.spikePos1.x = player.pos.x + (G.BEAT_RADIUS * Math.cos(player.angle));
-	player.spikePos1.y = player.pos.y + (G.BEAT_RADIUS * Math.sin(player.angle));
+	player.spikePos1.x = player.pos.x + screenShakeOffsetX + (G.BEAT_RADIUS * Math.cos(player.angle));
+	player.spikePos1.y = player.pos.y + screenShakeOffsetY + (G.BEAT_RADIUS * Math.sin(player.angle));
 
-	player.spikePoint1.x = player.pos.x + ((G.BEAT_RADIUS + player.spikeLength) * Math.cos(player.angle));
-	player.spikePoint1.y = player.pos.y + ((G.BEAT_RADIUS + player.spikeLength) * Math.sin(player.angle));
+	player.spikePoint1.x = player.pos.x + screenShakeOffsetX + ((G.BEAT_RADIUS + player.spikeLength) * Math.cos(player.angle));
+	player.spikePoint1.y = player.pos.y + screenShakeOffsetY + ((G.BEAT_RADIUS + player.spikeLength) * Math.sin(player.angle));
 
-	player.spikePoint2.x = player.pos.x + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_2_PERCENTAGE) * Math.cos(player.angle));
-	player.spikePoint2.y = player.pos.y + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_2_PERCENTAGE) * Math.sin(player.angle));
+	player.spikePoint2.x = player.pos.x + screenShakeOffsetX + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_2_PERCENTAGE) * Math.cos(player.angle));
+	player.spikePoint2.y = player.pos.y + screenShakeOffsetY + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_2_PERCENTAGE) * Math.sin(player.angle));
 
-	player.spikePoint3.x = player.pos.x + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_3_PERCENTAGE) * Math.cos(player.angle));
-	player.spikePoint3.y = player.pos.y + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_3_PERCENTAGE) * Math.sin(player.angle));
+	player.spikePoint3.x = player.pos.x + screenShakeOffsetX + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_3_PERCENTAGE) * Math.cos(player.angle));
+	player.spikePoint3.y = player.pos.y + screenShakeOffsetY + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_3_PERCENTAGE) * Math.sin(player.angle));
 
-	player.spikePoint4.x = player.pos.x + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_4_PERCENTAGE) * Math.cos(player.angle));
-	player.spikePoint4.y = player.pos.y + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_4_PERCENTAGE) * Math.sin(player.angle));
+	player.spikePoint4.x = player.pos.x + screenShakeOffsetX + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_4_PERCENTAGE) * Math.cos(player.angle));
+	player.spikePoint4.y = player.pos.y + screenShakeOffsetY + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_4_PERCENTAGE) * Math.sin(player.angle));
 
-	player.spikePoint5.x = player.pos.x + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_5_PERCENTAGE) * Math.cos(player.angle));
-	player.spikePoint5.y = player.pos.y + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_5_PERCENTAGE) * Math.sin(player.angle));
+	player.spikePoint5.x = player.pos.x + screenShakeOffsetX + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_5_PERCENTAGE) * Math.cos(player.angle));
+	player.spikePoint5.y = player.pos.y + screenShakeOffsetY + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_5_PERCENTAGE) * Math.sin(player.angle));
 
-	player.spikePoint6.x = player.pos.x + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_6_PERCENTAGE) * Math.cos(player.angle));
-	player.spikePoint6.y = player.pos.y + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_6_PERCENTAGE) * Math.sin(player.angle));
+	player.spikePoint6.x = player.pos.x + screenShakeOffsetX + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_6_PERCENTAGE) * Math.cos(player.angle));
+	player.spikePoint6.y = player.pos.y + screenShakeOffsetY + (((G.BEAT_RADIUS + player.spikeLength) * G.POINT_6_PERCENTAGE) * Math.sin(player.angle));
 
 	line(player.spikePos1.x, player.spikePos1.y, player.spikePoint1.x, player.spikePoint1.y, 1);
 	line(player.spikePos1.x, player.spikePos1.y, player.spikePoint2.x, player.spikePoint2.y, 2);
@@ -217,7 +225,7 @@ function playerHandler()
 	color("white");
 	deathRadius += G.DEATH_RADIUS_RATE;
 
-	arc(player.pos, deathRadius, G.BEAT_THICKNESS, player.rotation, player.rotation + (2 * Math.PI));
+	arc(player.pos.x + screenShakeOffsetX, player.pos.y + screenShakeOffsetY, deathRadius, G.BEAT_THICKNESS, player.rotation, player.rotation + (2 * Math.PI));
 
 }
 
@@ -289,21 +297,40 @@ function beatHandler()
 		}
 
 
-		box(b.pos, 10);
-		arc(b.pos, G.BEAT_RADIUS, G.BEAT_THICKNESS, b.angle - G.BEAT_ROTATION_MOD, (b.angle + (2 * Math.PI)) - G.BEAT_ROTATION_MOD);
+		box(b.pos.x + screenShakeOffsetX, b.pos.y + screenShakeOffsetY, 10);
+		arc(b.pos.x + screenShakeOffsetX, b.pos.y + screenShakeOffsetY, G.BEAT_RADIUS, G.BEAT_THICKNESS, b.angle - G.BEAT_ROTATION_MOD, (b.angle + (2 * Math.PI)) - G.BEAT_ROTATION_MOD);
 
 		color('black');
 		
 		var arcStart = b.angle - G.BEAT_ROTATION_MOD + Math.PI + 0.2;
 		//arc(b.pos, G.BEAT_RADIUS, G.BEAT_THICKNESS + .4, arcStart + .1, arcStart + G.BEAT_ARC_LENGTH);
 
-		const isCollidingWithSpike1 = line(b.pos.x, b.pos.y, b.pos.x + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)),  b.pos.y + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)), 2).isColliding.char.a;
-		const isCollidingWithSpike2 = line(b.pos.x, b.pos.y, b.pos.x + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)),  b.pos.y + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)), 2).isColliding.char.a;
-		const isCollidingWithSpike3 = line(b.pos.x + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)),  b.pos.y + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)), b.pos.x + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)),  b.pos.y + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)), 2).isColliding.char.a;
-		const isCollidingWithSpike4 = line(b.pos.x + ((2) * Math.cos(Math.PI + b.angle)), b.pos.y + ((2) * Math.sin(Math.PI + b.angle)), b.pos.x + ((G.BEAT_RADIUS) * Math.cos(Math.PI + b.angle)),  b.pos.y + ((G.BEAT_RADIUS) * Math.sin(Math.PI + b.angle)), 3).isColliding.char.a;
+		const isCollidingWithSpike1 = line(b.pos.x + screenShakeOffsetX, b.pos.y + screenShakeOffsetY, b.pos.x + screenShakeOffsetX + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)),  b.pos.y + screenShakeOffsetY + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)), 2).isColliding.char.a;
+		const isCollidingWithSpike2 = line(b.pos.x + screenShakeOffsetX, b.pos.y + screenShakeOffsetY, b.pos.x + screenShakeOffsetX + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)),  b.pos.y + screenShakeOffsetY + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)), 2).isColliding.char.a;
+		const isCollidingWithSpike3 = line(b.pos.x + screenShakeOffsetX + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)),  b.pos.y + screenShakeOffsetY + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle + G.BEAT_TRIANGLE_MOD1)), b.pos.x + screenShakeOffsetX + ((G.BEAT_RADIUS + 1.6) * Math.cos(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)),  b.pos.y + screenShakeOffsetY + ((G.BEAT_RADIUS + 1.6) * Math.sin(Math.PI + b.angle - G.BEAT_TRIANGLE_MOD1)), 2).isColliding.char.a;
+		const isCollidingWithSpike4 = line(b.pos.x + screenShakeOffsetX + ((2) * Math.cos(Math.PI + b.angle)), b.pos.y + screenShakeOffsetY + ((2) * Math.sin(Math.PI + b.angle)), b.pos.x + screenShakeOffsetX + ((G.BEAT_RADIUS) * Math.cos(Math.PI + b.angle)),  b.pos.y + screenShakeOffsetY + ((G.BEAT_RADIUS) * Math.sin(Math.PI + b.angle)), 3).isColliding.char.a;
 
 		if(isCollidingWithSpike1 || isCollidingWithSpike2 || isCollidingWithSpike3 || isCollidingWithSpike4)
 		{
+			if(b.color == 0)
+			{
+				color("blue");
+			} else if(b.color == 1)
+			{
+				color("red");
+			} else
+			{
+				color("yellow");
+			}
+			// Generate particles
+			particle(
+					(b.pos.x + player.pos.x)/2, // x coordinate
+					(b.pos.y + player.pos.y)/2, // y coordinate
+					200, // The number of particles
+					2.5, // The speed of the particles
+			);
+			color("purple");
+			line(player.pos, b.pos, 16.5);
 			player.pos = b.pos;
 			player.angle += Math.PI;
 			play("jump");
@@ -311,6 +338,7 @@ function beatHandler()
 			deathRadius -= 2;
 			combo += 10;
 			comboDeadAngle = player.angle - (2 * PI);
+			screenShakeCounter = 0;
 			if(deathRadius < 0)
 			{
 				deathRadius = 0;
@@ -339,6 +367,21 @@ function cameraSimulation()
 	}
 }
 
+function screenShake()
+{
+	if(screenShakeCounter < G.SHAKE_DURATION)
+	{
+		screenShakeOffsetX = rnd(-screenShakeMagnitude, screenShakeMagnitude);
+		screenShakeOffsetY = rnd(-screenShakeMagnitude, screenShakeMagnitude);
+
+		screenShakeMagnitude -= .1;
+		screenShakeCounter++;
+	} else
+	{
+		screenShakeMagnitude = G.SHAKE_MAGNITUDE;
+	}
+}
+
 function update() {
 	if (!ticks) {
 		initialize();
@@ -355,6 +398,8 @@ function update() {
 	beatHandler();
 
 	cameraSimulation();
+
+	screenShake();
 
 	if(deathRadius >= G.BEAT_RADIUS + .05)
 	{
