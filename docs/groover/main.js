@@ -225,6 +225,7 @@ function playerHandler()
 	color("white");
 	deathRadius += G.DEATH_RADIUS_RATE;
 
+	box(player.pos.x + screenShakeOffsetX, player.pos.y + screenShakeOffsetY, deathRadius*2);
 	arc(player.pos.x + screenShakeOffsetX, player.pos.y + screenShakeOffsetY, deathRadius, G.BEAT_THICKNESS, player.rotation, player.rotation + (2 * Math.PI));
 
 }
