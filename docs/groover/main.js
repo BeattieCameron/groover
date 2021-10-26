@@ -99,7 +99,10 @@ options = {
 	viewSize: {x: G.WIDTH, y: G.HEIGHT},
 	seed: 2122342,
 	isPlayingBgm: true,
-	theme: "shapeDark"
+	theme: "shapeDark",
+	isCapturing: true,
+	isCapturingGameCanvasOnly: true,
+	captureCanvasScale: 2
 };
 
 function initialize()
